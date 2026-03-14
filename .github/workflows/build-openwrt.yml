@@ -24,6 +24,8 @@ on:
         required: true
         default: 'snapshot'
         type: string
+schedule:
+    - cron: '0 20 * * 5'  # 自动和手动合并,这样就合并成功了，不会报错
 
 env:
   REPO_URL: https://git.openwrt.org/openwrt/openwrt.git
