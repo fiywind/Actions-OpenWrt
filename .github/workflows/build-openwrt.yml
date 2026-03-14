@@ -3,6 +3,13 @@ name: Build OpenWrt
 on:
   repository_dispatch:
   workflow_dispatch:
+    # ... 保持你原有的 inputs 不变 ...
+  schedule:
+    - cron: '0 20 * * 5' # 每周五北京时间凌晨 4:00 自动触发
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
     inputs:
       ssh:
         description: 'SSH connection to Actions'
@@ -133,7 +140,8 @@ jobs:
 
     - name: Generate snapshot Release Tag
       id: snapshottag 
-      if: github.event.inputs.version == 'snapshot'
+      # 修改 if 条件：如果是手动选了 snapshot 或者 触发方式是定时任务(schedule)
+      if: github.event.inputs.version == 'snapshot' || github.event_name == 'schedule'
       run: |
         echo "release_tag=SNAPSHOT_$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_OUTPUT
         echo "status=success" >> $GITHUB_OUTPUT
